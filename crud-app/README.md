@@ -2,6 +2,28 @@
 
 A full-stack CRUD (Create, Read, Update, Delete) application for managing contacts with names and addresses. Built with Node.js/Express backend and React frontend.
 
+## 🚀 Quick Start with Docker (Recommended)
+
+The easiest way to run this application is using Docker:
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd bobbi/crud-app
+
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Access the application
+open http://localhost:5000
+```
+
+**That's it!** The application is now running with both frontend and backend on port 5000.
+
+For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
+
+---
+
 ## Features
 
 - ✅ View all contacts (20 pre-loaded fictitious contacts)
@@ -39,15 +61,34 @@ crud-app/
 └── README.md
 ```
 
-## Installation
+## Installation Options
 
-### Prerequisites
+### Option 1: Docker (Recommended for Production)
+
+See [DOCKER.md](./DOCKER.md) for complete Docker deployment guide.
+
+**Quick Start:**
+```bash
+docker-compose up -d
+```
+
+Access at: http://localhost:5000
+
+### Option 2: Local Development Setup
+
+#### Prerequisites
 - Node.js (v14 or higher)
 - npm
 
-### Setup Instructions
+#### Setup Instructions
 
-1. **Install backend dependencies:**
+1. **Clone the repository:**
+```bash
+git clone <your-repo-url>
+cd bobbi/crud-app
+```
+
+2. **Install backend dependencies:**
 ```bash
 cd crud-app
 npm install

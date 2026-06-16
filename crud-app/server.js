@@ -12,6 +12,11 @@ const DATA_FILE = path.join(__dirname, 'data.json');
 app.use(cors());
 app.use(bodyParser.json());
 
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+}
+
 // Helper function to read data
 async function readData() {
   try {
@@ -131,8 +136,16 @@ app.delete('/api/contacts/:id', async (req, res) => {
   }
 });
 
+// Serve React app for all non-API routes in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 // Made with Bob

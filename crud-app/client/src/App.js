@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-const API_URL = 'http://localhost:5001/api/contacts';
+const API_URL = process.env.NODE_ENV === 'production'
+  ? '/api/contacts'
+  : 'http://localhost:5001/api/contacts';
 
 function App() {
   const [contacts, setContacts] = useState([]);
