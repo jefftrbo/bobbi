@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "address": "123 Maple Street, Springfield, IL 62701"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "address": "456 Oak Avenue, Portland, OR 97201"
+  },
+  {
+    "id": 3,
+    "name": "Carol Williams",
+    "address": "789 Pine Road, Austin, TX 78701"
+  },
+  {
+    "id": 4,
+    "name": "David Brown",
+    "address": "321 Elm Street, Seattle, WA 98101"
+  },
+  {
+    "id": 5,
+    "name": "Emma Davis",
+    "address": "654 Cedar Lane, Denver, CO 80201"
+  },
+  {
+    "id": 6,
+    "name": "Frank Miller",
+    "address": "987 Birch Boulevard, Boston, MA 02101"
+  },
+  {
+    "id": 7,
+    "name": "Grace Wilson",
+    "address": "147 Spruce Court, Miami, FL 33101"
+  },
+  {
+    "id": 8,
+    "name": "Henry Moore",
+    "address": "258 Willow Drive, Phoenix, AZ 85001"
+  },
+  {
+    "id": 9,
+    "name": "Iris Taylor",
+    "address": "369 Ash Street, Atlanta, GA 30301"
+  },
+  {
+    "id": 10,
+    "name": "Jack Anderson",
+    "address": "741 Poplar Avenue, Chicago, IL 60601"
+  },
+  {
+    "id": 11,
+    "name": "Karen Thomas",
+    "address": "852 Hickory Lane, Philadelphia, PA 19101"
+  },
+  {
+    "id": 12,
+    "name": "Leo Jackson",
+    "address": "963 Walnut Road, San Diego, CA 92101"
+  },
+  {
+    "id": 13,
+    "name": "Maria White",
+    "address": "159 Chestnut Street, Dallas, TX 75201"
+  },
+  {
+    "id": 14,
+    "name": "Nathan Harris",
+    "address": "357 Magnolia Drive, Houston, TX 77001"
+  },
+  {
+    "id": 15,
+    "name": "Olivia Martin",
+    "address": "486 Sycamore Court, San Francisco, CA 94101"
+  },
+  {
+    "id": 16,
+    "name": "Paul Thompson",
+    "address": "624 Redwood Boulevard, Las Vegas, NV 89101"
+  },
+  {
+    "id": 17,
+    "name": "Quinn Garcia",
+    "address": "735 Cypress Avenue, Nashville, TN 37201"
+  },
+  {
+    "id": 18,
+    "name": "Rachel Martinez",
+    "address": "846 Dogwood Lane, Detroit, MI 48201"
+  },
+  {
+    "id": 19,
+    "name": "Samuel Robinson",
+    "address": "957 Fir Street, Minneapolis, MN 55401"
+  },
+  {
+    "id": 20,
+    "name": "Tina Clark",
+    "address": "168 Beech Road, New York, NY 10001"
+  },
+  {
+    "id": 21,
+    "name": "john smith",
+    "address": "4578 johnson street, hollywood, fl 33329"
+  },
+  {
+    "id": 22,
+    "name": "Jose Miguel Ojos",
+    "address": "68903 Center Court Drive, Pueblo, CO 44821"
+  }
+]
