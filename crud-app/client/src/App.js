@@ -9,14 +9,13 @@ const API_URL = process.env.NODE_ENV === 'production'
 function App() {
   // State management
   const [contacts, setContacts] = useState([]);
-  const [formData, setFormData] = useState({ name: '', address: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
   // Modal state - controls visibility and content of the modal window
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContact, setModalContact] = useState(null);
-  const [modalMode, setModalMode] = useState('view'); // 'view', 'edit', or 'delete'
+  const [modalMode, setModalMode] = useState('view'); // 'view', 'edit', 'delete', or 'add'
 
   // Fetch all contacts on component mount
   useEffect(() => {
@@ -43,18 +42,7 @@ function App() {
   };
 
   /**
-   * Handles input changes in the add contact form
-   * @param {Event} e - The input change event
-   */
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  /**
-   * Handles input changes in the modal edit form
+   * Handles input changes in the modal form
    * @param {Event} e - The input change event
    */
   const handleModalInputChange = (e) => {
@@ -65,47 +53,18 @@ function App() {
   };
 
   /**
-   * Handles form submission for adding a new contact
-   * @param {Event} e - The form submit event
-   */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.address) {
-      setError('Please fill in all fields');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      
-      // Create new contact
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      if (!response.ok) throw new Error('Failed to create contact');
-      
-      setFormData({ name: '', address: '' });
-      setError('');
-      fetchContacts();
-    } catch (err) {
-      setError(err.message);
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /**
    * Opens the modal window with contact details
-   * @param {Object} contact - The contact to display in the modal
+   * @param {Object} contact - The contact to display in the modal (null for new contact)
    */
   const openModal = (contact) => {
-    setModalContact({ ...contact });
-    setModalMode('view');
+    if (contact) {
+      setModalContact({ ...contact });
+      setModalMode('view');
+    } else {
+      // Open modal in add mode with empty contact
+      setModalContact({ name: '', address: '' });
+      setModalMode('add');
+    }
     setModalOpen(true);
   };
 
@@ -134,9 +93,9 @@ function App() {
   };
 
   /**
-   * Handles updating a contact from the modal
+   * Handles saving a contact from the modal (add or update)
    */
-  const handleModalUpdate = async () => {
+  const handleModalSave = async () => {
     if (!modalContact.name || !modalContact.address) {
       setError('Please fill in all fields');
       return;
@@ -145,13 +104,25 @@ function App() {
     try {
       setLoading(true);
       
-      const response = await fetch(`${API_URL}/${modalContact.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: modalContact.name, address: modalContact.address })
-      });
-      
-      if (!response.ok) throw new Error('Failed to update contact');
+      if (modalMode === 'add') {
+        // Create new contact
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: modalContact.name, address: modalContact.address })
+        });
+        
+        if (!response.ok) throw new Error('Failed to create contact');
+      } else {
+        // Update existing contact
+        const response = await fetch(`${API_URL}/${modalContact.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: modalContact.name, address: modalContact.address })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update contact');
+      }
       
       setError('');
       fetchContacts();
@@ -196,48 +167,18 @@ function App() {
       </header>
 
       <div className="container">
-        {/* Add Contact Form Section */}
-        <div className="form-section">
-          <h2>Add New Contact</h2>
-          
-          {error && !modalOpen && <div className="error-message">{error}</div>}
-          
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Enter name"
-                disabled={loading}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="address">Address:</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="Enter address"
-                disabled={loading}
-              />
-            </div>
-            
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Adding...' : 'Add Contact'}
-            </button>
-          </form>
-        </div>
-
         {/* Contacts List Section with Scrolling */}
         <div className="contacts-section">
-          <h2>Contacts ({contacts.length})</h2>
+          <div className="contacts-header">
+            <h2>Contacts ({contacts.length})</h2>
+            <button
+              className="btn btn-add-contact"
+              onClick={() => openModal(null)}
+              disabled={loading}
+            >
+              ➕ Add New Contact
+            </button>
+          </div>
           
           {loading && contacts.length === 0 ? (
             <div className="loading">Loading contacts...</div>
@@ -274,6 +215,7 @@ function App() {
                 {modalMode === 'view' && '👤 Contact Details'}
                 {modalMode === 'edit' && '✏️ Edit Contact'}
                 {modalMode === 'delete' && '⚠️ Delete Contact'}
+                {modalMode === 'add' && '➕ Add New Contact'}
               </h2>
               <button className="modal-close" onClick={closeModal} aria-label="Close modal">
                 ✕
@@ -293,6 +235,37 @@ function App() {
                   <div className="detail-row">
                     <strong>Address:</strong>
                     <span>{modalContact.address}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Add Mode */}
+              {modalMode === 'add' && (
+                <div className="modal-form">
+                  <div className="form-group">
+                    <label htmlFor="modal-name">Name:</label>
+                    <input
+                      type="text"
+                      id="modal-name"
+                      name="name"
+                      value={modalContact.name}
+                      onChange={handleModalInputChange}
+                      placeholder="Enter contact name"
+                      disabled={loading}
+                      autoFocus
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="modal-address">Address:</label>
+                    <input
+                      type="text"
+                      id="modal-address"
+                      name="address"
+                      value={modalContact.address}
+                      onChange={handleModalInputChange}
+                      placeholder="Enter contact address"
+                      disabled={loading}
+                    />
                   </div>
                 </div>
               )}
@@ -372,17 +345,36 @@ function App() {
                 </>
               )}
 
+              {modalMode === 'add' && (
+                <>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleModalSave}
+                    disabled={loading}
+                  >
+                    {loading ? 'Adding...' : 'Add Contact'}
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={closeModal}
+                    disabled={loading}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
+
               {modalMode === 'edit' && (
                 <>
-                  <button 
-                    className="btn btn-primary" 
-                    onClick={handleModalUpdate}
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleModalSave}
                     disabled={loading}
                   >
                     {loading ? 'Saving...' : 'Save Changes'}
                   </button>
-                  <button 
-                    className="btn btn-secondary" 
+                  <button
+                    className="btn btn-secondary"
                     onClick={() => setModalMode('view')}
                     disabled={loading}
                   >

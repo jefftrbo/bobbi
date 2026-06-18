@@ -59,23 +59,9 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
-/* Form Section - Responsive padding */
-.form-section {
-  background: white;
-  padding: clamp(1rem, 3vw, 2rem);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-section h2 {
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-}
-
+/* Form Group (used in modal) */
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -176,16 +162,53 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
-  max-height: calc(100vh - 400px);
+  min-height: 400px;
+  max-height: calc(100vh - 200px);
 }
 
-.contacts-section h2 {
-  color: #333;
+/* Contacts Header with Add Button */
+.contacts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  /* Prevent heading from shrinking */
+  /* Prevent header from shrinking */
   flex-shrink: 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.contacts-header h2 {
+  color: #333;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin: 0;
+}
+
+/* Add New Contact Button */
+.btn-add-contact {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  /* Prevent text selection */
+  user-select: none;
+}
+
+.btn-add-contact:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  background: linear-gradient(135deg, #218838 0%, #1ea87a 100%);
+}
+
+.btn-add-contact:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Scrolling Container for Contacts List */
