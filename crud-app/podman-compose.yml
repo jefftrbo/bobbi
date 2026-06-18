@@ -1,26 +1,53 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=contacts_db
+      - POSTGRES_USER=contacts_user
+      - POSTGRES_PASSWORD=contacts_secure_pass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U contacts_user -d contacts_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   crud-app:
     build:
       context: .
       dockerfile: Containerfile
     container_name: crud-contact-manager
     ports:
-      - "5000:5000"
-    volumes:
-      # Mount data.json to persist changes
-      # :Z flag for SELinux systems (Fedora, RHEL, CentOS)
-      - ./data.json:/app/data.json:Z
+      - "8080:5000"
     environment:
       - NODE_ENV=production
       - PORT=5000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=contacts_db
+      - DB_USER=contacts_user
+      - DB_PASSWORD=contacts_secure_pass
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/api/contacts', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
       interval: 30s
       timeout: 3s
       retries: 3
-      start_period: 5s
+      start_period: 15s
 
-# Made with Bob - Podman Edition
+volumes:
+  postgres-data:
+    driver: local
+
+# Made with Bob - Podman Edition with PostgreSQL
