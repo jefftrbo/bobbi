@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -12,51 +13,67 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  /* Prevent horizontal scrolling on small screens */
+  overflow-x: hidden;
 }
 
+/* Main App Container - Responsive height management */
 .App {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding-bottom: 2rem;
 }
 
+/* Header Section - Responsive sizing */
 .App-header {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  /* Flexible padding for smaller screens */
+  padding: clamp(1rem, 4vw, 2rem);
 }
 
 .App-header h1 {
   color: #667eea;
-  font-size: 2.5rem;
+  /* Responsive font size using clamp */
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   margin-bottom: 0.5rem;
 }
 
 .App-header p {
   color: #666;
-  font-size: 1.1rem;
+  /* Responsive font size */
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
+/* Container - Responsive width and padding */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 clamp(0.5rem, 2vw, 1rem);
+  width: 100%;
+  /* Allow container to grow vertically */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* Form Section */
+/* Form Section - Responsive padding */
 .form-section {
   background: white;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
 }
 
 .form-section h2 {
   color: #333;
   margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
 }
 
 .form-group {
@@ -68,7 +85,7 @@ body {
   margin-bottom: 0.5rem;
   color: #555;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .form-group input {
@@ -76,7 +93,7 @@ body {
   padding: 0.75rem;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: border-color 0.3s;
 }
 
@@ -90,20 +107,17 @@ body {
   cursor: not-allowed;
 }
 
-.button-group {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
+/* Button Styles */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  /* Prevent text selection on buttons */
+  user-select: none;
 }
 
 .btn:disabled {
@@ -134,7 +148,7 @@ body {
   background-color: #28a745;
   color: white;
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1.8vw, 0.9rem);
 }
 
 .btn-edit:hover:not(:disabled) {
@@ -145,65 +159,298 @@ body {
   background-color: #dc3545;
   color: white;
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1.8vw, 0.9rem);
 }
 
 .btn-delete:hover:not(:disabled) {
   background-color: #c82333;
 }
 
-/* Contacts Section */
+/* Contacts Section - Responsive with flexible height */
 .contacts-section {
   background: white;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* Allow section to grow but not exceed viewport */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  max-height: calc(100vh - 400px);
 }
 
 .contacts-section h2 {
   color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-}
-
-.contacts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.contact-card {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.contact-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.contact-info {
   margin-bottom: 1rem;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  /* Prevent heading from shrinking */
+  flex-shrink: 0;
 }
 
-.contact-info h3 {
-  color: #333;
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+/* Scrolling Container for Contacts List */
+.contacts-list-container {
+  /* Enable vertical scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  /* Custom scrollbar styling for webkit browsers */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #f0f0f0;
 }
 
-.contact-info p {
+.contacts-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.contacts-list-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.contacts-list-container::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+.contacts-list-container::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
+}
+
+/* Contacts List Styles */
+.contacts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+  /* Responsive gap between name and address */
+  gap: clamp(0.5rem, 2vw, 1rem);
+  /* Allow wrapping on very small screens */
+  flex-wrap: wrap;
+}
+
+.contact-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.contact-list-item:last-child {
+  border-bottom: none;
+}
+
+/* Clickable Contact Name Link */
+.contact-name-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: color 0.2s;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  /* Flexible width */
+  flex: 0 1 auto;
+  min-width: 150px;
+}
+
+.contact-name-link:hover {
+  color: #5568d3;
+  text-decoration-color: #5568d3;
+}
+
+.contact-name-link:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Contact Address Preview */
+.contact-address-preview {
   color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  /* Allow address to take remaining space */
+  flex: 1 1 auto;
+  text-align: right;
+  /* Truncate long addresses with ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
-.contact-actions {
+/* Modal Overlay - Full screen backdrop */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* Smooth fade-in animation */
+  animation: fadeIn 0.2s ease-in;
+  /* Enable scrolling if modal content is too tall */
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Content Box - Responsive sizing */
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+  /* Responsive max height */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  /* Smooth scale-in animation */
+  animation: scaleIn 0.2s ease-out;
+  /* Prevent content from overflowing */
+  overflow: hidden;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-bottom: 1px solid #e0e0e0;
+  /* Prevent header from shrinking */
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  color: #333;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  transition: color 0.2s;
+  border-radius: 4px;
+}
+
+.modal-close:hover {
+  color: #333;
+  background-color: #f0f0f0;
+}
+
+/* Modal Body - Scrollable content area */
+.modal-body {
+  padding: clamp(1rem, 3vw, 1.5rem);
+  /* Enable scrolling for long content */
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Contact Details Display */
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-row strong {
+  color: #555;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.detail-row span {
+  color: #333;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  word-wrap: break-word;
+}
+
+/* Modal Form Styles */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Delete Confirmation Styles */
+.delete-confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.delete-confirmation p {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  color: #333;
+}
+
+.warning-text {
+  color: #dc3545;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Modal Footer */
+.modal-footer {
   display: flex;
   gap: 0.75rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-top: 1px solid #e0e0e0;
+  /* Prevent footer from shrinking */
+  flex-shrink: 0;
+  /* Wrap buttons on small screens */
+  flex-wrap: wrap;
+}
+
+.modal-footer .btn {
+  /* Flexible button sizing */
+  flex: 1 1 auto;
+  min-width: 100px;
 }
 
 /* Messages */
@@ -214,50 +461,167 @@ body {
   border-radius: 8px;
   margin-bottom: 1rem;
   border: 1px solid #f5c6cb;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .loading {
   text-align: center;
   padding: 2rem;
   color: #666;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 3rem 1rem;
   color: #999;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   background-color: #f8f9fa;
   border-radius: 8px;
 }
 
-/* Responsive Design */
+/* Responsive Design - Tablet and Mobile */
 @media (max-width: 768px) {
-  .App-header h1 {
-    font-size: 2rem;
+  .App-header {
+    padding: 1.5rem 1rem;
   }
 
-  .App-header p {
-    font-size: 1rem;
+  .container {
+    padding: 0 0.75rem;
+    gap: 1.5rem;
   }
 
   .form-section,
   .contacts-section {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
-  .contacts-grid {
-    grid-template-columns: 1fr;
+  /* Adjust contacts section height for mobile */
+  .contacts-section {
+    max-height: calc(100vh - 350px);
+    min-height: 250px;
   }
 
-  .button-group {
+  /* Stack contact list items vertically on small screens */
+  .contact-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .contact-name-link {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .contact-address-preview {
+    text-align: left;
+    width: 100%;
+    white-space: normal;
+  }
+
+  /* Modal adjustments for mobile */
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-footer {
     flex-direction: column;
   }
 
-  .btn {
+  .modal-footer .btn {
     width: 100%;
+    min-width: auto;
   }
 }
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+  .App-header {
+    padding: 1rem 0.75rem;
+  }
+
+  .container {
+    padding: 0 0.5rem;
+    gap: 1rem;
+  }
+
+  .form-section,
+  .contacts-section {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .contacts-section {
+    max-height: calc(100vh - 320px);
+    min-height: 200px;
+  }
+
+  .contact-list-item {
+    padding: 0.75rem;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 1rem;
+  }
+}
+
+/* Landscape Orientation on Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .App-header {
+    padding: 1rem;
+  }
+
+  .App-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .App-header p {
+    font-size: 0.9rem;
+  }
+
+  .container {
+    gap: 1rem;
+  }
+
+  .contacts-section {
+    max-height: calc(100vh - 250px);
+  }
+
+  .modal-content {
+    max-height: 85vh;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .App-header,
+  .form-section,
+  .btn,
+  .modal-overlay {
+    display: none;
+  }
+
+  .contacts-section {
+    box-shadow: none;
+    max-height: none;
+  }
+
+  .contacts-list-container {
+    overflow: visible;
+  }
+
+  .contact-list-item {
+    page-break-inside: avoid;
+  }
+}
+
+/* Made with Bob - Enhanced with responsive design and modal windows */
 
 /* Made with Bob */

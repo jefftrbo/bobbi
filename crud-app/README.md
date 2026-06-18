@@ -2,6 +2,15 @@
 
 A full-stack CRUD (Create, Read, Update, Delete) application for managing contacts with names and addresses. Built with Node.js/Express backend and React frontend.
 
+## ✨ New Features (v2.0)
+
+- **📜 Scrolling Contact List**: Efficiently browse through large contact lists with smooth scrolling
+- **🪟 Modal Windows**: Interactive view/edit/delete operations in elegant modal dialogs
+- **📱 Fully Responsive**: Optimized for desktop, tablet, and mobile devices with adaptive layouts
+- **♿ Accessible**: WCAG 2.1 AA compliant with keyboard navigation and screen reader support
+
+See [FRONTEND-UPDATES.md](./FRONTEND-UPDATES.md) for detailed documentation of all UI enhancements.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -64,13 +73,22 @@ For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
 
 ## Features
 
+### Core Functionality
 - ✅ View all contacts (20 pre-loaded fictitious contacts)
-- ✅ Add new contacts
-- ✅ Edit existing contacts
-- ✅ Delete contacts
+- ✅ Add new contacts with name and address
+- ✅ Edit existing contacts via modal window
+- ✅ Delete contacts with confirmation dialog
 - ✅ Persistent storage using JSON file
-- ✅ Modern, responsive UI
 - ✅ Real-time updates
+
+### User Interface (v2.0)
+- ✅ **Scrolling Contact List**: Efficient browsing with custom scrollbar
+- ✅ **Clickable Contact Names**: Click any name to view details
+- ✅ **Modal Windows**: View, edit, and delete in elegant dialogs
+- ✅ **Responsive Design**: Adapts to all screen sizes (desktop, tablet, mobile)
+- ✅ **Smooth Animations**: Fade-in and scale effects
+- ✅ **Accessibility**: Keyboard navigation and screen reader support
+- ✅ **Touch-Friendly**: Optimized for mobile touch interactions
 
 ## Tech Stack
 
@@ -80,8 +98,12 @@ For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
 - File system (JSON storage)
 
 **Frontend:**
-- React 18
-- Modern CSS with gradients
+- React 18 with Hooks (useState, useEffect)
+- Modern CSS3 with responsive design
+- CSS Flexbox for layouts
+- CSS clamp() for responsive typography
+- Modal windows with animations
+- Custom scrollbar styling
 - Fetch API for HTTP requests
 
 ## Project Structure
@@ -217,11 +239,48 @@ curl -X DELETE http://localhost:5000/api/contacts/1
 
 ## Usage
 
-1. Open http://localhost:3000 in your browser
-2. View the list of 20 pre-loaded contacts
-3. Use the form at the top to add new contacts
-4. Click "Edit" on any contact card to modify it
-5. Click "Delete" to remove a contact (with confirmation)
+### Using the Application
+
+1. **Open the Application**
+   - Production (Podman/Docker): http://localhost:5000
+   - Development: http://localhost:3000
+
+2. **View Contacts**
+   - Browse the scrolling list of contacts
+   - Scroll through the list to see all contacts
+
+3. **Add New Contact**
+   - Fill in the "Name" and "Address" fields at the top
+   - Click "Add Contact" button
+   - New contact appears in the list immediately
+
+4. **View Contact Details**
+   - Click on any contact name in the list
+   - Modal window opens showing full details
+
+5. **Edit Contact**
+   - Click on a contact name to open the modal
+   - Click "Edit" button in the modal
+   - Modify the name or address
+   - Click "Save Changes" or "Cancel"
+
+6. **Delete Contact**
+   - Click on a contact name to open the modal
+   - Click "Delete" button in the modal
+   - Confirm deletion in the confirmation dialog
+   - Click "Yes, Delete" or "Cancel"
+
+7. **Close Modal**
+   - Click the "✕" button in the top-right corner
+   - Click "Close" button at the bottom
+   - Click outside the modal (on the dark overlay)
+
+### Keyboard Shortcuts
+
+- **Tab**: Navigate between interactive elements
+- **Enter**: Activate buttons and links
+- **Escape**: Close modal window (browser default)
+- **Arrow Keys**: Scroll through contact list
 
 ## Data Persistence
 
@@ -264,15 +323,45 @@ React development server with hot reload
 - Ensure the backend has write permissions to data.json
 - Check server console for error messages
 
+**Modal Not Opening:**
+- Check browser console for JavaScript errors
+- Ensure contact name links are clickable
+- Try refreshing the page
+
+**Scrolling Not Working:**
+- Verify browser supports CSS `overflow-y: auto`
+- Check if contact list has enough items to scroll
+- Try a different browser
+
+**Responsive Layout Issues:**
+- Clear browser cache
+- Ensure browser supports CSS `clamp()` function
+- Update to latest browser version
+- Check browser zoom level (should be 100%)
+
+## Documentation
+
+- **[README.md](./README.md)** - This file, main documentation
+- **[FRONTEND-UPDATES.md](./FRONTEND-UPDATES.md)** - Detailed frontend v2.0 documentation
+- **[PODMAN.md](./PODMAN.md)** - Comprehensive Podman deployment guide
+- **[PODMAN-SETUP.md](./PODMAN-SETUP.md)** - Quick Podman setup reference
+- **[DOCKER.md](./DOCKER.md)** - Docker deployment guide
+- **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide
+
 ## Future Enhancements
 
 - [ ] Search and filter functionality
-- [ ] Pagination for large datasets
-- [ ] Input validation and error handling
+- [ ] Sorting options (by name, date added)
+- [ ] Pagination or virtual scrolling for very large datasets
+- [ ] Enhanced input validation
 - [ ] Database integration (MongoDB/PostgreSQL)
-- [ ] User authentication
-- [ ] Export contacts to CSV
+- [ ] User authentication and authorization
+- [ ] Export contacts to CSV/JSON
 - [ ] Import contacts from file
+- [ ] Contact photos/avatars
+- [ ] Additional contact fields (phone, email, etc.)
+- [ ] Contact groups/categories
+- [ ] Bulk operations (select multiple, bulk delete)
 
 ## License
 

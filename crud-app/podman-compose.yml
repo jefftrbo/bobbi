@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  crud-app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: crud-contact-manager
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount data.json to persist changes
+      # :Z flag for SELinux systems (Fedora, RHEL, CentOS)
+      - ./data.json:/app/data.json:Z
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/api/contacts', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+# Made with Bob - Podman Edition
