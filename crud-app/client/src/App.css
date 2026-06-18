@@ -13,11 +13,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  /* Prevent horizontal scrolling on small screens */
   overflow-x: hidden;
 }
 
-/* Main App Container - Responsive height management */
+/* Main App Container */
 .App {
   min-height: 100vh;
   display: flex;
@@ -25,43 +24,511 @@ body {
   padding-bottom: 2rem;
 }
 
-/* Header Section - Responsive sizing */
+/* Header Section */
 .App-header {
   background-color: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  /* Flexible padding for smaller screens */
-  padding: clamp(1rem, 4vw, 2rem);
 }
 
 .App-header h1 {
   color: #667eea;
-  /* Responsive font size using clamp */
   font-size: clamp(1.5rem, 5vw, 2.5rem);
   margin-bottom: 0.5rem;
 }
 
 .App-header p {
   color: #666;
-  /* Responsive font size */
   font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
-/* Container - Responsive width and padding */
+/* Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(0.5rem, 2vw, 1rem);
   width: 100%;
-  /* Allow container to grow vertically */
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 }
 
-/* Form Group (used in modal) */
+/* ============================================================================
+   SEARCH AND FILTER BAR - NEW IN v3.1
+   ============================================================================ */
+
+.filter-bar {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.filter-select {
+  padding: 0.625rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  min-width: 150px;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.btn-clear-filters {
+  padding: 0.625rem 1rem;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.btn-clear-filters:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* ============================================================================
+   ACTION BAR - NEW IN v3.1
+   ============================================================================ */
+
+.action-bar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-manage-groups {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-manage-groups:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-manage-groups:active {
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   CONTACTS SECTION
+   ============================================================================ */
+
+.contacts-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+}
+
+.contacts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contacts-header h2 {
+  color: #333;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  margin: 0;
+}
+
+.btn-add-contact {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add-contact:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-add-contact:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-add-contact:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   CONTACTS LIST
+   ============================================================================ */
+
+.contacts-list-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 600px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.contacts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list-item {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-list-item:last-child {
+  border-bottom: none;
+}
+
+.contact-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.contact-name-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.contact-name-link:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+.contact-address-preview {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+/* ============================================================================
+   GROUP BADGES - NEW IN v3.1
+   ============================================================================ */
+
+.contact-groups-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.group-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.groups-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ============================================================================
+   GROUPS SELECTOR - NEW IN v3.1
+   ============================================================================ */
+
+.groups-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.group-checkbox:hover {
+  background-color: #e9ecef;
+}
+
+.group-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.group-checkbox span {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* ============================================================================
+   MODAL STYLES
+   ============================================================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-groups {
+  max-width: 700px;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  color: #333;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* ============================================================================
+   GROUPS MANAGEMENT MODAL - NEW IN v3.1
+   ============================================================================ */
+
+.group-form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.group-form h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.groups-list {
+  margin-top: 1.5rem;
+}
+
+.groups-list h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.groups-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+}
+
+.group-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.group-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.group-info strong {
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.group-description {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.group-count {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.group-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #f0f0f0;
+}
+
+/* ============================================================================
+   FORM STYLES
+   ============================================================================ */
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -93,17 +560,25 @@ body {
   cursor: not-allowed;
 }
 
-/* Button Styles */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================================================
+   BUTTON STYLES
+   ============================================================================ */
+
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  /* Prevent text selection on buttons */
-  user-select: none;
+  white-space: nowrap;
 }
 
 .btn:disabled {
@@ -114,302 +589,50 @@ body {
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background: #f5f5f5;
+  color: #666;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #5a6268;
+  background: #e0e0e0;
+  color: #333;
 }
 
 .btn-edit {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  font-size: clamp(0.85rem, 1.8vw, 0.9rem);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-edit:hover:not(:disabled) {
-  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-delete {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  font-size: clamp(0.85rem, 1.8vw, 0.9rem);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-delete:hover:not(:disabled) {
-  background-color: #c82333;
-}
-
-/* Contacts Section - Responsive with flexible height */
-.contacts-section {
-  background: white;
-  padding: clamp(1rem, 3vw, 2rem);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  /* Allow section to grow but not exceed viewport */
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 400px;
-  max-height: calc(100vh - 200px);
-}
-
-/* Contacts Header with Add Button */
-.contacts-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  /* Prevent header from shrinking */
-  flex-shrink: 0;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.contacts-header h2 {
-  color: #333;
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  margin: 0;
-}
-
-/* Add New Contact Button */
-.btn-add-contact {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  white-space: nowrap;
-  /* Prevent text selection */
-  user-select: none;
-}
-
-.btn-add-contact:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
-  background: linear-gradient(135deg, #218838 0%, #1ea87a 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.btn-add-contact:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+/* ============================================================================
+   CONTACT DETAILS
+   ============================================================================ */
 
-/* Scrolling Container for Contacts List */
-.contacts-list-container {
-  /* Enable vertical scrolling */
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-  /* Custom scrollbar styling for webkit browsers */
-  scrollbar-width: thin;
-  scrollbar-color: #667eea #f0f0f0;
-}
-
-.contacts-list-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.contacts-list-container::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 4px;
-}
-
-.contacts-list-container::-webkit-scrollbar-thumb {
-  background: #667eea;
-  border-radius: 4px;
-}
-
-.contacts-list-container::-webkit-scrollbar-thumb:hover {
-  background: #5568d3;
-}
-
-/* Contacts List Styles */
-.contacts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.contact-list-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  transition: background-color 0.2s;
-  /* Responsive gap between name and address */
-  gap: clamp(0.5rem, 2vw, 1rem);
-  /* Allow wrapping on very small screens */
-  flex-wrap: wrap;
-}
-
-.contact-list-item:hover {
-  background-color: #f8f9fa;
-}
-
-.contact-list-item:last-child {
-  border-bottom: none;
-}
-
-/* Clickable Contact Name Link */
-.contact-name-link {
-  background: none;
-  border: none;
-  color: #667eea;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-weight: 600;
-  cursor: pointer;
-  text-align: left;
-  padding: 0;
-  transition: color 0.2s;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  /* Flexible width */
-  flex: 0 1 auto;
-  min-width: 150px;
-}
-
-.contact-name-link:hover {
-  color: #5568d3;
-  text-decoration-color: #5568d3;
-}
-
-.contact-name-link:focus {
-  outline: 2px solid #667eea;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Contact Address Preview */
-.contact-address-preview {
-  color: #666;
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
-  /* Allow address to take remaining space */
-  flex: 1 1 auto;
-  text-align: right;
-  /* Truncate long addresses with ellipsis */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
-
-/* Modal Overlay - Full screen backdrop */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  /* Smooth fade-in animation */
-  animation: fadeIn 0.2s ease-in;
-  /* Enable scrolling if modal content is too tall */
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Modal Content Box - Responsive sizing */
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 600px;
-  /* Responsive max height */
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  /* Smooth scale-in animation */
-  animation: scaleIn 0.2s ease-out;
-  /* Prevent content from overflowing */
-  overflow: hidden;
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Modal Header */
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border-bottom: 1px solid #e0e0e0;
-  /* Prevent header from shrinking */
-  flex-shrink: 0;
-}
-
-.modal-header h2 {
-  color: #333;
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
-  margin: 0;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #666;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  line-height: 1;
-  transition: color 0.2s;
-  border-radius: 4px;
-}
-
-.modal-close:hover {
-  color: #333;
-  background-color: #f0f0f0;
-}
-
-/* Modal Body - Scrollable content area */
-.modal-body {
-  padding: clamp(1rem, 3vw, 1.5rem);
-  /* Enable scrolling for long content */
-  overflow-y: auto;
-  flex: 1;
-}
-
-/* Contact Details Display */
 .contact-details {
   display: flex;
   flex-direction: column;
@@ -420,136 +643,111 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
 .detail-row strong {
-  color: #555;
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #667eea;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .detail-row span {
   color: #333;
-  font-size: clamp(1rem, 2.5vw, 1.1rem);
-  word-wrap: break-word;
+  font-size: 1rem;
 }
 
-/* Modal Form Styles */
-.modal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+/* ============================================================================
+   DELETE CONFIRMATION
+   ============================================================================ */
 
-/* Delete Confirmation Styles */
 .delete-confirmation {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  text-align: center;
 }
 
 .delete-confirmation p {
-  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
-  color: #333;
+  margin-bottom: 1.5rem;
+  color: #666;
+  font-size: 1.1rem;
 }
 
 .warning-text {
   color: #dc3545;
   font-weight: 600;
-  font-style: italic;
+  margin-top: 1rem;
 }
 
-/* Modal Footer */
-.modal-footer {
-  display: flex;
-  gap: 0.75rem;
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border-top: 1px solid #e0e0e0;
-  /* Prevent footer from shrinking */
-  flex-shrink: 0;
-  /* Wrap buttons on small screens */
-  flex-wrap: wrap;
-}
-
-.modal-footer .btn {
-  /* Flexible button sizing */
-  flex: 1 1 auto;
-  min-width: 100px;
-}
-
-/* Messages */
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #f5c6cb;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-}
+/* ============================================================================
+   UTILITY STYLES
+   ============================================================================ */
 
 .loading {
   text-align: center;
-  padding: 2rem;
-  color: #666;
-  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  padding: 3rem;
+  color: #667eea;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 3rem;
   color: #999;
-  font-size: clamp(1rem, 2.5vw, 1.1rem);
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  font-size: 1.1rem;
 }
 
-/* Responsive Design - Tablet and Mobile */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #c33;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
 @media (max-width: 768px) {
   .App-header {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
   }
 
-  .container {
-    padding: 0 0.75rem;
-    gap: 1.5rem;
+  .filter-bar {
+    padding: 1rem;
   }
 
-  .form-section,
-  .contacts-section {
-    padding: 1.25rem;
-  }
-
-  /* Adjust contacts section height for mobile */
-  .contacts-section {
-    max-height: calc(100vh - 350px);
-    min-height: 250px;
-  }
-
-  /* Stack contact list items vertically on small screens */
-  .contact-list-item {
+  .filter-controls {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    align-items: stretch;
   }
 
-  .contact-name-link {
-    min-width: auto;
+  .filter-select {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .action-bar {
+    flex-direction: column;
+  }
+
+  .btn-add-contact,
+  .btn-manage-groups {
     width: 100%;
   }
 
-  .contact-address-preview {
-    text-align: left;
-    width: 100%;
-    white-space: normal;
-  }
-
-  /* Modal adjustments for mobile */
-  .modal-overlay {
-    padding: 0.5rem;
+  .contacts-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .modal-content {
-    max-height: 95vh;
+    max-width: 95%;
+    margin: 1rem;
   }
 
   .modal-footer {
@@ -558,93 +756,69 @@ body {
 
   .modal-footer .btn {
     width: 100%;
-    min-width: auto;
-  }
-}
-
-/* Extra Small Screens */
-@media (max-width: 480px) {
-  .App-header {
-    padding: 1rem 0.75rem;
   }
 
-  .container {
-    padding: 0 0.5rem;
+  .group-item {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
   }
 
-  .form-section,
-  .contacts-section {
-    padding: 1rem;
-    border-radius: 8px;
+  .group-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
+}
 
-  .contacts-section {
-    max-height: calc(100vh - 320px);
-    min-height: 200px;
-  }
-
+@media (max-width: 480px) {
   .contact-list-item {
     padding: 0.75rem;
   }
 
-  .modal-header,
-  .modal-body,
-  .modal-footer {
-    padding: 1rem;
+  .contact-name-link {
+    font-size: 1rem;
+  }
+
+  .contact-address-preview {
+    font-size: 0.85rem;
+  }
+
+  .group-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
   }
 }
 
-/* Landscape Orientation on Mobile */
-@media (max-height: 600px) and (orientation: landscape) {
-  .App-header {
-    padding: 1rem;
-  }
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
 
-  .App-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .App-header p {
-    font-size: 0.9rem;
-  }
-
-  .container {
-    gap: 1rem;
-  }
-
-  .contacts-section {
-    max-height: calc(100vh - 250px);
-  }
-
-  .modal-content {
-    max-height: 85vh;
-  }
+.contacts-list-container::-webkit-scrollbar,
+.groups-selector::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Print Styles */
-@media print {
-  .App-header,
-  .form-section,
-  .btn,
-  .modal-overlay {
-    display: none;
-  }
-
-  .contacts-section {
-    box-shadow: none;
-    max-height: none;
-  }
-
-  .contacts-list-container {
-    overflow: visible;
-  }
-
-  .contact-list-item {
-    page-break-inside: avoid;
-  }
+.contacts-list-container::-webkit-scrollbar-track,
+.groups-selector::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
-/* Made with Bob - Enhanced with responsive design and modal windows */
+.contacts-list-container::-webkit-scrollbar-thumb,
+.groups-selector::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.contacts-list-container::-webkit-scrollbar-thumb:hover,
+.groups-selector::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Made with Bob - v3.1 Edition with Enhanced UI */
 
 /* Made with Bob */
