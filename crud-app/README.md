@@ -2,9 +2,29 @@
 
 A full-stack CRUD (Create, Read, Update, Delete) application for managing contacts with names and addresses. Built with Node.js/Express backend and React frontend.
 
-## 🚀 Quick Start with Podman (Recommended)
+## 🚀 Quick Start
 
-The easiest way to run this application is using Podman:
+### Prerequisites
+
+You need either **Podman** (recommended) or **Docker** installed:
+
+**Install Podman (macOS):**
+```bash
+brew install podman
+podman machine init
+podman machine start
+```
+
+**Install Podman (Linux):**
+```bash
+# Fedora/RHEL/CentOS
+sudo dnf install podman
+
+# Ubuntu/Debian
+sudo apt-get update && sudo apt-get install podman
+```
+
+### Option 1: Podman (Recommended)
 
 ```bash
 # Clone the repository
@@ -12,7 +32,7 @@ git clone <your-repo-url>
 cd bobbi/crud-app
 
 # Build and run with Podman Compose
-podman-compose up -d
+podman compose up -d
 
 # Access the application
 open http://localhost:5000
@@ -22,12 +42,20 @@ open http://localhost:5000
 
 For detailed Podman instructions, see [PODMAN.md](./PODMAN.md)
 
-### Alternative: Docker
+### Option 2: Docker (Alternative)
 
-If you prefer Docker, you can still use it:
+If you prefer Docker:
 
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd bobbi/crud-app
+
+# Build and run with Docker Compose
 docker-compose up -d
+
+# Access the application
+open http://localhost:5000
 ```
 
 For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
@@ -79,7 +107,7 @@ See [PODMAN.md](./PODMAN.md) for complete Podman deployment guide.
 
 **Quick Start:**
 ```bash
-podman-compose up -d
+podman compose up -d
 ```
 
 Access at: http://localhost:5000
