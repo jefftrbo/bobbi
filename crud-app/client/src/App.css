@@ -292,7 +292,7 @@ body {
 .contact-name-link {
   background: none;
   border: none;
-  color: #667eea;
+  color: #333;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -302,7 +302,7 @@ body {
 }
 
 .contact-name-link:hover {
-  color: #764ba2;
+  color: #3b82f6;
   text-decoration: underline;
 }
 
@@ -642,14 +642,15 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #3b82f6;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover:not(:disabled) {
+  background: #2563eb;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -657,27 +658,27 @@ body {
 }
 
 .btn-secondary {
-  background: #f5f5f5;
-  color: #666;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: #64748b;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #e0e0e0;
-  color: #333;
+  background: #475569;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-edit {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: #3b82f6;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-edit:hover:not(:disabled) {
+  background: #2563eb;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(240, 147, 251, 0.4);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
 .btn-delete {
@@ -1053,3 +1054,256 @@ body {
 }
 
 /* Made with Bob - v3.2 Edition with Enhanced UI/UX */
+
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+
+/* Dark Mode Root Variables - Professional Slate Gray Palette */
+.dark-mode {
+  --bg-gradient-start: #0f172a;
+  --bg-gradient-end: #1e293b;
+  --header-bg: rgba(15, 23, 42, 0.98);
+  --card-bg: #1e293b;
+  --card-hover-bg: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+/* Dark Mode Body */
+.dark-mode body {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+}
+
+/* Dark Mode Header */
+.dark-mode .App-header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.dark-mode .App-header h1 {
+  color: #60a5fa;
+  text-shadow: 0 2px 10px rgba(96, 165, 250, 0.3);
+}
+
+.dark-mode .App-header p {
+  color: var(--text-secondary);
+}
+
+/* Dark Mode Cards and Containers */
+.dark-mode .card,
+.dark-mode .contact-list-item,
+.dark-mode .group-item {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode .contact-list-item:hover,
+.dark-mode .group-item:hover {
+  background-color: var(--card-hover-bg);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Dark Mode Contact Info - Ensure no blue background */
+.dark-mode .contact-info {
+  background-color: transparent;
+}
+
+/* Dark Mode Inputs and Selects */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background-color: #0f172a;
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+  border-color: var(--accent-primary);
+  background-color: #1e293b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark-mode input::placeholder {
+  color: #64748b;
+}
+
+/* Dark Mode Buttons */
+.dark-mode button {
+  background-color: #64748b;
+  color: white;
+  border: none;
+}
+
+.dark-mode button:hover {
+  background-color: #475569;
+}
+
+.dark-mode .btn-secondary {
+  background-color: #64748b;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dark-mode .btn-secondary:hover {
+  background-color: #475569;
+}
+
+.dark-mode .btn-danger {
+  background-color: #ef4444;
+  border: none;
+}
+
+.dark-mode .btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* Dark Mode Modal */
+.dark-mode .modal-content {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .modal-footer {
+  border-top-color: var(--border-color);
+}
+
+/* Dark Mode Empty State */
+.dark-mode .empty-state {
+  color: var(--text-secondary);
+}
+
+/* Dark Mode Loading Skeleton */
+.dark-mode .skeleton {
+  background: linear-gradient(
+    90deg,
+    #1e293b 0%,
+    #334155 50%,
+    #1e293b 100%
+  );
+}
+
+/* Dark Mode Toast Notifications */
+.dark-mode .toast {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .toast.success {
+  background-color: #064e3b;
+  border-color: #10b981;
+  color: #d1fae5;
+}
+
+.dark-mode .toast.error {
+  background-color: #7f1d1d;
+  border-color: #ef4444;
+  color: #fecaca;
+}
+
+/* Dark Mode Group Badges */
+.dark-mode .group-badge {
+  background-color: #475569;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Dark Mode Scrollbar */
+.dark-mode ::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--bg-gradient-start);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 5px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background-color: #64748b;
+}
+
+/* Dark Mode Text Colors */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+  color: var(--text-primary);
+}
+
+.dark-mode p,
+.dark-mode span,
+.dark-mode label {
+  color: var(--text-secondary);
+}
+
+.dark-mode strong {
+  color: var(--text-primary);
+}
+
+/* Dark Mode Contact Name Link */
+.dark-mode .contact-name-link {
+  color: var(--text-primary);
+}
+
+.dark-mode .contact-name-link:hover {
+  color: var(--accent-primary);
+}
+
+/* Dark Mode Links */
+.dark-mode a {
+  color: var(--accent-primary);
+}
+
+.dark-mode a:hover {
+  color: #60a5fa;
+}
+
+/* Dark Mode Checkbox */
+.dark-mode input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+}
+
+/* Dark Mode Select Dropdown */
+.dark-mode select option {
+  background-color: #0f172a;
+  color: var(--text-primary);
+}
+
+/* Dark Mode Avatar - Maintain vibrant colors */
+.dark-mode .contact-avatar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark Mode Error Messages */
+.dark-mode .error-message {
+  color: #ff6b6b;
+  background-color: rgba(237, 66, 69, 0.1);
+  border-color: #ed4245;
+}
+
+/* Dark Mode Success Messages */
+.dark-mode .success-message {
+  color: #51cf66;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-color: #4caf50;
+}
