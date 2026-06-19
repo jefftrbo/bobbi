@@ -222,6 +222,7 @@ function App() {
       
       setError('');
       fetchContacts();
+      fetchGroups(); // Refresh groups to update contact counts
       closeModal();
     } catch (err) {
       setError(err.message);
@@ -396,7 +397,7 @@ function App() {
     <div className="App">
       {/* Header Section */}
       <header className="App-header">
-        <h1>📇 Contact Manager v3.2</h1>
+        <h1>📇 Contact Manager v3.2.1</h1>
         <p>Search, organize, and manage your contacts with enhanced UI</p>
       </header>
 

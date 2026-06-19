@@ -603,7 +603,7 @@ process.on('SIGTERM', () => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('v3.2 Features: Full-text search, Groups, Audit trail, Advanced filtering, Backup/Restore, Enhanced UI/UX');
+  console.log('v3.2.1 Features: Full-text search, Groups, Audit trail, Advanced filtering, Backup/Restore, Enhanced UI/UX');
 });
 
-// Made with Bob - v3.2 Edition with Enhanced UI/UX
+// Made with Bob - v3.2.1 Edition with Enhanced UI/UX (Bug Fix: Groups dropdown refresh)
