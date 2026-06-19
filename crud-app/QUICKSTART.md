@@ -8,8 +8,8 @@ This guide will get you up and running in under 5 minutes.
 
 Before starting, ensure you have one of the following:
 
-**Option A: Docker (Recommended)**
-- Docker Desktop installed
+**Option A: Podman (Recommended)**
+- Podman Desktop installed
 - No other software needed!
 
 **Option B: Node.js**
@@ -25,18 +25,18 @@ cd bobbi/crud-app
 
 ### Step 2: Choose Your Path
 
-#### Path A: Docker (Easiest - Recommended)
+#### Path A: Podman (Easiest - Recommended)
 
 ```bash
 # Start the application
-docker-compose up -d
+podman-compose up -d
 
 # That's it! Open your browser
 open http://localhost:5000
 ```
 
 **What just happened?**
-- Docker built a production-ready image
+- Podman built a production-ready image
 - Started a container with the app
 - Mounted data.json for persistence
 - Application is now running on port 5000
@@ -44,13 +44,13 @@ open http://localhost:5000
 **Useful Commands:**
 ```bash
 # View logs
-docker-compose logs -f
+podman-compose logs -f
 
 # Stop the application
-docker-compose down
+podman-compose down
 
 # Restart
-docker-compose restart
+podman-compose restart
 ```
 
 #### Path B: Local Development
@@ -84,14 +84,14 @@ All changes are automatically saved to `data.json`!
 
 ## Troubleshooting
 
-### Docker Issues
+### Podman Issues
 
 **Port 5000 already in use:**
 ```bash
 # Stop whatever is using port 5000
 lsof -ti:5000 | xargs kill -9
 
-# Or change the port in docker-compose.yml
+# Or change the port in podman-compose.yml
 ports:
   - "8080:5000"  # Use port 8080 instead
 ```
@@ -99,11 +99,11 @@ ports:
 **Container won't start:**
 ```bash
 # Check logs
-docker-compose logs
+podman-compose logs
 
 # Rebuild from scratch
-docker-compose down
-docker-compose up -d --build
+podman-compose down
+podman-compose up -d --build
 ```
 
 ### Local Development Issues
@@ -131,7 +131,7 @@ cd client && npm install
 ## What's Next?
 
 - **Read the full documentation**: [README.md](./README.md)
-- **Learn about Docker deployment**: [DOCKER.md](./DOCKER.md)
+- **Learn about Podman deployment**: [DOCKER.md](./DOCKER.md)
 - **Explore the API**: Try the endpoints at http://localhost:5000/api/contacts
 - **Customize**: Edit the code and see changes in real-time (dev mode)
 
@@ -161,16 +161,16 @@ curl -X DELETE http://localhost:5000/api/contacts/1
 ## Need Help?
 
 1. Check the [README.md](./README.md) for detailed information
-2. Review [DOCKER.md](./DOCKER.md) for Docker-specific help
-3. Look at the logs: `docker-compose logs` or check terminal output
+2. Review [DOCKER.md](./DOCKER.md) for Podman-specific help
+3. Look at the logs: `podman-compose logs` or check terminal output
 4. Ensure all prerequisites are installed correctly
 
 ## Success Checklist
 
 - [ ] Repository cloned
-- [ ] Docker or Node.js installed
-- [ ] Application running (Docker or local)
-- [ ] Can access http://localhost:5000 (Docker) or http://localhost:3000 (local)
+- [ ] Podman or Node.js installed
+- [ ] Application running (Podman or local)
+- [ ] Can access http://localhost:5000 (Podman) or http://localhost:3000 (local)
 - [ ] Can view the 20 pre-loaded contacts
 - [ ] Can add, edit, and delete contacts
 - [ ] Changes persist after refresh

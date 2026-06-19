@@ -437,12 +437,12 @@ No action required! All improvements are automatic upon deployment.
 #### 1. Rebuild Containers:
 ```bash
 # Stop existing containers
-docker compose down
+/opt/podman/bin/podman down
 # or
 podman compose down
 
 # Rebuild with new frontend
-docker compose up -d --build
+/opt/podman/bin/podman up -d --build
 # or
 podman compose up -d --build
 ```

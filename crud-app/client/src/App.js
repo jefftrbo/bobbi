@@ -396,8 +396,8 @@ function App() {
     <div className="App">
       {/* Header Section */}
       <header className="App-header">
-        <h1>📇 Contact Manager v3.1</h1>
-        <p>Search, organize, and manage your contacts</p>
+        <h1>📇 Contact Manager v3.2</h1>
+        <p>Search, organize, and manage your contacts with enhanced UI</p>
       </header>
 
       <div className="container">

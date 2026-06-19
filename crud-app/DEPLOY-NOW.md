@@ -1,101 +1,71 @@
-# 🚀 Deploy CRUD App v3.2 - Quick Instructions
+# 🚀 Deploy CRUD App v3.2 - Podman Instructions
 
 **Status:** ✅ Code is ready for deployment  
 **Version:** 3.2.0 with UI/UX enhancements  
-**Action Required:** Start Docker and run deployment commands
+**Container Runtime:** Podman + Kubernetes
 
 ---
 
-## ⚠️ Current Status
+## 📋 Quick Deployment (Already Done!)
 
-The Docker daemon is not currently running on your system. You need to start it before deploying.
+The application has been successfully deployed with Podman. The v3.2 UI enhancements are now live!
+
+### Current Status:
+```bash
+✅ postgres-db container: Running (healthy)
+✅ crud-contact-manager container: Running with v3.2
+✅ Database: Connected successfully
+✅ Port 8080: Application accessible
+```
 
 ---
 
-## 📋 Step-by-Step Deployment
+## 🌐 Access Your Application
 
-### Step 1: Start Docker Desktop
+**URL:** http://localhost:8080
 
-**On macOS:**
-1. Open **Docker Desktop** application
-2. Wait for Docker to start (whale icon in menu bar should be steady)
-3. Verify it's running: The Docker icon should show "Docker Desktop is running"
+**Important:** Do a **hard refresh** to see the new v3.2 UI:
+- **Mac:** `Cmd + Shift + R`
+- **Windows/Linux:** `Ctrl + Shift + R`
 
-**Alternative - Start from Terminal:**
-```bash
-open -a Docker
-```
+---
 
-### Step 2: Verify Docker is Running
+## 🔄 Manual Rebuild (If Needed)
 
-```bash
-docker ps
-```
+If you need to rebuild the application manually:
 
-You should see a list of containers (or empty list if none running). If you see an error, Docker is not running yet.
-
-### Step 3: Navigate to Project Directory
-
+### Step 1: Stop and Remove Old Container
 ```bash
 cd ~/Desktop/bobbi/crud-app
+/opt/podman/bin/podman stop crud-contact-manager
+/opt/podman/bin/podman rm crud-contact-manager
 ```
 
-### Step 4: Stop Existing Containers (if any)
-
+### Step 2: Rebuild Image
 ```bash
-docker compose down
+/opt/podman/bin/podman build --no-cache -t crud-app-crud-app:latest -f Containerfile .
 ```
 
-This will stop and remove existing containers but preserve your data.
-
-### Step 5: Build and Deploy v3.2
-
+### Step 3: Start New Container
 ```bash
-docker compose up -d --build
+/opt/podman/bin/podman run -d \
+  --name crud-contact-manager \
+  --network crud-app_default \
+  -p 8080:5000 \
+  -e NODE_ENV=production \
+  -e PORT=5000 \
+  -e DB_HOST=postgres-db \
+  -e DB_PORT=5432 \
+  -e DB_NAME=contacts_db \
+  -e DB_USER=contacts_user \
+  -e DB_PASSWORD=contacts_secure_pass \
+  crud-app-crud-app:latest
 ```
 
-This command will:
-- Build the new frontend with v3.2 UI enhancements
-- Build the backend (no changes)
-- Start PostgreSQL database
-- Start all services in detached mode
-
-**Expected output:**
-```
-[+] Building ...
-[+] Running 3/3
- ✔ Container crud-app-db-1      Started
- ✔ Container crud-app-backend-1 Started  
- ✔ Container crud-app-frontend-1 Started
-```
-
-### Step 6: Verify Deployment
-
+### Step 4: Verify Deployment
 ```bash
-docker compose ps
-```
-
-All containers should show "Up" status:
-```
-NAME                    STATUS
-crud-app-db-1          Up
-crud-app-backend-1     Up (healthy)
-crud-app-frontend-1    Up
-```
-
-### Step 7: Check Logs (Optional)
-
-```bash
-docker compose logs -f
-```
-
-Press `Ctrl+C` to stop following logs.
-
-### Step 8: Access the Application
-
-Open your browser and navigate to:
-```
-http://localhost:8080
+/opt/podman/bin/podman ps
+/opt/podman/bin/podman logs crud-contact-manager
 ```
 
 ---
@@ -146,8 +116,8 @@ lsof -i :8080
 # Kill the process (replace PID with actual process ID)
 kill -9 <PID>
 
-# Try deployment again
-docker compose up -d --build
+# Restart container
+/opt/podman/bin/podman start crud-contact-manager
 ```
 
 ### Issue: Old styles still showing
@@ -161,58 +131,132 @@ docker compose up -d --build
 # Or clear browser cache completely
 ```
 
-### Issue: Build fails
+### Issue: Container won't start
 
 **Solution:**
 ```bash
-# Clean up everything and start fresh
-docker compose down -v
-docker system prune -f
-docker compose up -d --build
+# Check container logs
+/opt/podman/bin/podman logs crud-contact-manager
+
+# Check if database is running
+/opt/podman/bin/podman ps | grep postgres-db
+
+# Restart database if needed
+/opt/podman/bin/podman restart postgres-db
+
+# Wait 10 seconds, then restart app
+/opt/podman/bin/podman restart crud-contact-manager
 ```
 
 ### Issue: Database connection errors
 
 **Solution:**
 ```bash
-# Wait for database to be ready
-docker compose logs db
+# Check database logs
+/opt/podman/bin/podman logs postgres-db
 
-# Restart backend after database is ready
-docker compose restart backend
+# Verify network
+/opt/podman/bin/podman network ls
+
+# Restart both containers
+/opt/podman/bin/podman restart postgres-db
+sleep 10
+/opt/podman/bin/podman restart crud-contact-manager
 ```
 
 ---
 
-## 📊 Expected Results
+## 📊 Container Management
 
-After successful deployment, you should see:
+### View Running Containers
+```bash
+/opt/podman/bin/podman ps
+```
 
-✅ **Avatars:** Colorful circles with initials on all contacts  
-✅ **Loading:** Animated skeletons on page load  
-✅ **Toasts:** Success/error messages for all operations  
-✅ **Hover:** Smooth animations on cards and buttons  
-✅ **Ripple:** Click effects on all buttons  
-✅ **Performance:** Fast, responsive interface  
-✅ **Data:** All existing contacts and groups preserved  
+### View All Containers (including stopped)
+```bash
+/opt/podman/bin/podman ps -a
+```
+
+### View Container Logs
+```bash
+# Follow logs in real-time
+/opt/podman/bin/podman logs -f crud-contact-manager
+
+# View last 50 lines
+/opt/podman/bin/podman logs --tail 50 crud-contact-manager
+```
+
+### Stop Containers
+```bash
+/opt/podman/bin/podman stop crud-contact-manager
+/opt/podman/bin/podman stop postgres-db
+```
+
+### Start Containers
+```bash
+/opt/podman/bin/podman start postgres-db
+sleep 5
+/opt/podman/bin/podman start crud-contact-manager
+```
+
+### Restart Containers
+```bash
+/opt/podman/bin/podman restart crud-contact-manager
+```
+
+### Remove Containers
+```bash
+/opt/podman/bin/podman stop crud-contact-manager
+/opt/podman/bin/podman rm crud-contact-manager
+```
 
 ---
 
-## 🔄 Rollback (if needed)
+## 🔄 Complete Rebuild Process
 
-If something goes wrong and you need to rollback:
+If you need to completely rebuild everything:
 
 ```bash
-# Stop containers
-docker compose down
+cd ~/Desktop/bobbi/crud-app
 
-# Checkout previous version
-cd client/src
-git checkout HEAD~1 App.js App.css
-cd ../..
+# Stop and remove containers
+/opt/podman/bin/podman stop crud-contact-manager postgres-db
+/opt/podman/bin/podman rm crud-contact-manager postgres-db
 
-# Rebuild and deploy
-docker compose up -d --build
+# Remove old image
+/opt/podman/bin/podman rmi crud-app-crud-app:latest
+
+# Rebuild image
+/opt/podman/bin/podman build --no-cache -t crud-app-crud-app:latest -f Containerfile .
+
+# Start database first
+/opt/podman/bin/podman run -d \
+  --name postgres-db \
+  --network crud-app_default \
+  -p 5432:5432 \
+  -e POSTGRES_DB=contacts_db \
+  -e POSTGRES_USER=contacts_user \
+  -e POSTGRES_PASSWORD=contacts_secure_pass \
+  -v postgres-data:/var/lib/postgresql/data \
+  postgres:16-alpine
+
+# Wait for database to be ready
+sleep 10
+
+# Start application
+/opt/podman/bin/podman run -d \
+  --name crud-contact-manager \
+  --network crud-app_default \
+  -p 8080:5000 \
+  -e NODE_ENV=production \
+  -e PORT=5000 \
+  -e DB_HOST=postgres-db \
+  -e DB_PORT=5432 \
+  -e DB_NAME=contacts_db \
+  -e DB_USER=contacts_user \
+  -e DB_PASSWORD=contacts_secure_pass \
+  crud-app-crud-app:latest
 ```
 
 ---
@@ -235,12 +279,9 @@ To test on mobile devices:
 
 ## 🎯 Success Checklist
 
-- [ ] Docker Desktop is running
-- [ ] Navigated to crud-app directory
-- [ ] Ran `docker compose down`
-- [ ] Ran `docker compose up -d --build`
-- [ ] All containers show "Up" status
+- [ ] Containers are running (`/opt/podman/bin/podman ps`)
 - [ ] Application accessible at http://localhost:8080
+- [ ] Hard refreshed browser to see new UI
 - [ ] Avatars display on all contacts
 - [ ] Loading skeletons appear on refresh
 - [ ] Toast notifications work
@@ -254,35 +295,37 @@ To test on mobile devices:
 
 If you encounter issues:
 
-1. **Check logs:**
+1. **Check container status:**
    ```bash
-   docker compose logs -f
+   /opt/podman/bin/podman ps -a
    ```
 
-2. **Check browser console:**
+2. **Check logs:**
+   ```bash
+   /opt/podman/bin/podman logs crud-contact-manager
+   /opt/podman/bin/podman logs postgres-db
+   ```
+
+3. **Check browser console:**
    - Open DevTools (F12)
    - Look for errors in Console tab
 
-3. **Review documentation:**
+4. **Review documentation:**
    - CHANGELOG-v3.2-UI-UX.md
    - DEPLOYMENT-v3.2.md
+   - PODMAN.md
 
 ---
 
 ## 🎉 You're Ready!
 
-Once Docker is running, execute these commands:
+Your CRUD Contact Manager v3.2 is deployed and running with Podman!
 
-```bash
-cd ~/Desktop/bobbi/crud-app
-docker compose down
-docker compose up -d --build
-```
+**Access:** http://localhost:8080  
+**Remember:** Hard refresh to see the new UI!
 
-Then open: **http://localhost:8080**
-
-Enjoy your enhanced CRUD Contact Manager v3.2! 🚀
+Enjoy your enhanced Contact Manager! 🚀
 
 ---
 
-**Made with ❤️ by Bob - Ready for Deployment**
+**Made with ❤️ by Bob - Podman Edition**

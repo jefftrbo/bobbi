@@ -15,7 +15,7 @@ See [FRONTEND-UPDATES.md](./FRONTEND-UPDATES.md) for detailed documentation of a
 
 ### Prerequisites
 
-You need either **Podman** (recommended) or **Docker** installed:
+You need either **Podman** (recommended) or **Podman** installed:
 
 **Install Podman (macOS):**
 ```bash
@@ -51,23 +51,23 @@ open http://localhost:5000
 
 For detailed Podman instructions, see [PODMAN.md](./PODMAN.md)
 
-### Option 2: Docker (Alternative)
+### Option 2: Podman (Alternative)
 
-If you prefer Docker:
+If you prefer Podman:
 
 ```bash
 # Clone the repository
 git clone <your-repo-url>
 cd bobbi/crud-app
 
-# Build and run with Docker Compose
-docker-compose up -d
+# Build and run with Podman Compose
+podman-compose up -d
 
 # Access the application
 open http://localhost:5000
 ```
 
-For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
+For detailed Podman instructions, see [DOCKER.md](./DOCKER.md)
 
 ---
 
@@ -134,13 +134,13 @@ podman compose up -d
 
 Access at: http://localhost:5000
 
-### Option 2: Docker (Alternative Container Runtime)
+### Option 2: Podman (Alternative Container Runtime)
 
-See [DOCKER.md](./DOCKER.md) for complete Docker deployment guide.
+See [DOCKER.md](./DOCKER.md) for complete Podman deployment guide.
 
 **Quick Start:**
 ```bash
-docker-compose up -d
+podman-compose up -d
 ```
 
 Access at: http://localhost:5000
@@ -242,7 +242,7 @@ curl -X DELETE http://localhost:5000/api/contacts/1
 ### Using the Application
 
 1. **Open the Application**
-   - Production (Podman/Docker): http://localhost:5000
+   - Production (Podman/Podman): http://localhost:5000
    - Development: http://localhost:3000
 
 2. **View Contacts**
@@ -345,7 +345,7 @@ React development server with hot reload
 - **[FRONTEND-UPDATES.md](./FRONTEND-UPDATES.md)** - Detailed frontend v2.0 documentation
 - **[PODMAN.md](./PODMAN.md)** - Comprehensive Podman deployment guide
 - **[PODMAN-SETUP.md](./PODMAN-SETUP.md)** - Quick Podman setup reference
-- **[DOCKER.md](./DOCKER.md)** - Docker deployment guide
+- **[DOCKER.md](./DOCKER.md)** - Podman deployment guide
 - **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide
 
 ## Future Enhancements
