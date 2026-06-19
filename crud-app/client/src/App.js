@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 // API URL configuration for development and production environments
@@ -28,17 +28,49 @@ function App() {
   // Groups management modal
   const [groupsModalOpen, setGroupsModalOpen] = useState(false);
   const [editingGroup, setEditingGroup] = useState(null);
+  
+  // Toast notifications state
+  const [toasts, setToasts] = useState([]);
+  const toastIdCounter = useRef(0);
+  
+  // Loading skeleton state
+  const [initialLoading, setInitialLoading] = useState(true);
 
   // Fetch all contacts and groups on component mount
   useEffect(() => {
-    fetchContacts();
-    fetchGroups();
+    const initializeData = async () => {
+      await Promise.all([fetchContacts(), fetchGroups()]);
+      setInitialLoading(false);
+    };
+    initializeData();
   }, []);
 
   // Fetch contacts when filters change
   useEffect(() => {
-    fetchContacts();
+    if (!initialLoading) {
+      fetchContacts();
+    }
   }, [searchTerm, selectedGroupFilter, sortBy, sortOrder]);
+
+  /**
+   * Shows a toast notification
+   */
+  const showToast = (message, type = 'info', duration = 3000) => {
+    const id = toastIdCounter.current++;
+    const toast = { id, message, type };
+    setToasts(prev => [...prev, toast]);
+    
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, duration);
+  };
+
+  /**
+   * Dismisses a toast notification
+   */
+  const dismissToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   /**
    * Fetches all contacts from the API with filters
@@ -61,6 +93,7 @@ function App() {
       setError('');
     } catch (err) {
       setError('Failed to fetch contacts');
+      showToast('Failed to fetch contacts', 'error');
       console.error(err);
     } finally {
       setLoading(false);
@@ -152,6 +185,7 @@ function App() {
   const handleModalSave = async () => {
     if (!modalContact.name || !modalContact.address) {
       setError('Please fill in all fields');
+      showToast('Please fill in all fields', 'error');
       return;
     }
 
@@ -173,6 +207,7 @@ function App() {
         });
         
         if (!response.ok) throw new Error('Failed to create contact');
+        showToast(`✓ Contact "${modalContact.name}" created successfully`, 'success');
       } else {
         // Update existing contact
         const response = await fetch(`${API_BASE}/contacts/${modalContact.id}`, {
@@ -182,6 +217,7 @@ function App() {
         });
         
         if (!response.ok) throw new Error('Failed to update contact');
+        showToast(`✓ Contact "${modalContact.name}" updated successfully`, 'success');
       }
       
       setError('');
@@ -189,6 +225,7 @@ function App() {
       closeModal();
     } catch (err) {
       setError(err.message);
+      showToast(err.message, 'error');
       console.error(err);
     } finally {
       setLoading(false);
@@ -201,6 +238,7 @@ function App() {
   const handleModalDelete = async () => {
     try {
       setLoading(true);
+      const contactName = modalContact.name;
       const response = await fetch(`${API_BASE}/contacts/${modalContact.id}`, {
         method: 'DELETE'
       });
@@ -208,10 +246,12 @@ function App() {
       if (!response.ok) throw new Error('Failed to delete contact');
       
       setError('');
+      showToast(`✓ Contact "${contactName}" deleted successfully`, 'success');
       fetchContacts();
       closeModal();
     } catch (err) {
       setError(err.message);
+      showToast(err.message, 'error');
       console.error(err);
     } finally {
       setLoading(false);
@@ -252,6 +292,7 @@ function App() {
           body: JSON.stringify({ name, description })
         });
         if (!response.ok) throw new Error('Failed to update group');
+        showToast(`✓ Group "${name}" updated successfully`, 'success');
       } else {
         // Create new group
         const response = await fetch(`${API_BASE}/groups`, {
@@ -260,13 +301,14 @@ function App() {
           body: JSON.stringify({ name, description })
         });
         if (!response.ok) throw new Error('Failed to create group');
+        showToast(`✓ Group "${name}" created successfully`, 'success');
       }
       
       fetchGroups();
       setEditingGroup(null);
       e.target.reset();
     } catch (err) {
-      alert(err.message);
+      showToast(err.message, 'error');
     }
   };
 
@@ -274,6 +316,7 @@ function App() {
    * Handles deleting a group
    */
   const handleDeleteGroup = async (groupId) => {
+    const group = groups.find(g => g.id === groupId);
     if (!window.confirm('Are you sure you want to delete this group? Contacts will not be deleted.')) {
       return;
     }
@@ -284,10 +327,11 @@ function App() {
       });
       if (!response.ok) throw new Error('Failed to delete group');
       
+      showToast(`✓ Group "${group?.name}" deleted successfully`, 'success');
       fetchGroups();
       fetchContacts();
     } catch (err) {
-      alert(err.message);
+      showToast(err.message, 'error');
     }
   };
 
@@ -300,6 +344,53 @@ function App() {
     setSortBy('name');
     setSortOrder('ASC');
   };
+
+  /**
+   * Generates avatar initials from contact name
+   */
+  const getAvatarInitials = (name) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  /**
+   * Generates a consistent color for avatar based on name
+   */
+  const getAvatarColor = (name) => {
+    const colors = [
+      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+      'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+      'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  /**
+   * Loading skeleton component
+   */
+  const LoadingSkeleton = () => (
+    <div className="contacts-list">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="contact-list-item skeleton-item">
+          <div className="skeleton-avatar"></div>
+          <div className="skeleton-content">
+            <div className="skeleton-line skeleton-line-name"></div>
+            <div className="skeleton-line skeleton-line-address"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="App">
@@ -390,36 +481,52 @@ function App() {
             </h2>
           </div>
           
-          {loading && contacts.length === 0 ? (
-            <div className="loading">Loading contacts...</div>
+          {initialLoading ? (
+            <div className="contacts-list-container">
+              <LoadingSkeleton />
+            </div>
           ) : contacts.length === 0 ? (
             <div className="empty-state">
-              {searchTerm || selectedGroupFilter 
-                ? 'No contacts found matching your filters.' 
-                : 'No contacts found. Add your first contact above!'}
+              <div className="empty-state-icon">📇</div>
+              <h3>{searchTerm || selectedGroupFilter
+                ? 'No contacts found'
+                : 'No contacts yet'}</h3>
+              <p>{searchTerm || selectedGroupFilter
+                ? 'Try adjusting your search or filters.'
+                : 'Get started by adding your first contact above!'}</p>
             </div>
           ) : (
             <div className="contacts-list-container">
               <ul className="contacts-list">
                 {contacts.map((contact) => (
                   <li key={contact.id} className="contact-list-item">
-                    <button 
-                      className="contact-name-link"
-                      onClick={() => openModal(contact)}
-                      title="Click to view details"
-                    >
-                      {contact.name}
-                    </button>
-                    <span className="contact-address-preview">{contact.address}</span>
-                    {contact.groups && contact.groups.length > 0 && (
-                      <div className="contact-groups-preview">
-                        {contact.groups.map(group => (
-                          <span key={group.id} className="group-badge">
-                            {group.name}
-                          </span>
-                        ))}
+                    <div className="contact-card-content">
+                      <div
+                        className="contact-avatar"
+                        style={{ background: getAvatarColor(contact.name) }}
+                      >
+                        {getAvatarInitials(contact.name)}
                       </div>
-                    )}
+                      <div className="contact-info">
+                        <button
+                          className="contact-name-link"
+                          onClick={() => openModal(contact)}
+                          title="Click to view details"
+                        >
+                          {contact.name}
+                        </button>
+                        <span className="contact-address-preview">{contact.address}</span>
+                        {contact.groups && contact.groups.length > 0 && (
+                          <div className="contact-groups-preview">
+                            {contact.groups.map(group => (
+                              <span key={group.id} className="group-badge">
+                                {group.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -729,10 +836,26 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications Container */}
+      <div className="toast-container">
+        {toasts.map(toast => (
+          <div key={toast.id} className={`toast toast-${toast.type}`}>
+            <span className="toast-message">{toast.message}</span>
+            <button
+              className="toast-close"
+              onClick={() => dismissToast(toast.id)}
+              aria-label="Dismiss notification"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 export default App;
 
-// Made with Bob - v3.1 Edition with Search, Groups, and Filtering
+// Made with Bob - v3.2 Edition with Enhanced UI/UX
