@@ -466,12 +466,15 @@ Password: contacts_secure_pass
    ```sql
    CREATE TABLE groups (
        id SERIAL PRIMARY KEY,
-       name VARCHAR(255) NOT NULL
+       name VARCHAR(255) NOT NULL UNIQUE,
+       description TEXT,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
    
    CREATE TABLE contact_groups (
-       contact_id INTEGER REFERENCES contacts(id),
-       group_id INTEGER REFERENCES groups(id),
+       contact_id INTEGER REFERENCES contacts(id) ON DELETE CASCADE,
+       group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
        PRIMARY KEY (contact_id, group_id)
    );
    ```

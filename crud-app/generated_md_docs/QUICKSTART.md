@@ -1,20 +1,18 @@
-# Quick Start Guide - Contact Manager CRUD App
+# Quick Start Guide - Contact Manager CRUD App v3.2.3
 
-This guide will get you up and running in under 5 minutes.
+This guide will get you up and running in under 5 minutes with PostgreSQL database.
 
 ## For New Users Cloning This Repository
 
 ### Prerequisites Check
 
-Before starting, ensure you have one of the following:
+Before starting, ensure you have:
 
-**Option A: Podman (Recommended)**
+**Required:**
 - Podman Desktop installed
-- No other software needed!
+- Ports 8080 (app) and 5434 (database) available
 
-**Option B: Node.js**
-- Node.js v14+ installed
-- npm installed
+**Version:** v3.2.3 with PostgreSQL 15
 
 ### Step 1: Clone the Repository
 
@@ -23,117 +21,163 @@ git clone <your-repo-url>
 cd bobbi/crud-app
 ```
 
-### Step 2: Choose Your Path
+### Step 2: Start the Application
 
-#### Path A: Podman (Easiest - Recommended)
+#### Quick Start (Recommended)
 
 ```bash
-# Start the application
-podman-compose up -d
+# Create pod for networking
+podman pod create --name crud-app-pod -p 8080:5000 -p 5434:5432
 
-# That's it! Open your browser
-open http://localhost:5000
+# Start PostgreSQL
+podman run -d --pod crud-app-pod --name postgres-db \
+  -e POSTGRES_DB=contacts_db \
+  -e POSTGRES_USER=contacts_user \
+  -e POSTGRES_PASSWORD=contacts_secure_pass \
+  -v postgres-data:/var/lib/postgresql/data \
+  postgres:15-alpine
+
+# Wait for database to be ready
+sleep 8
+
+# Initialize database schema
+podman exec -i postgres-db psql -U contacts_user -d contacts_db < scripts/init-database.sql
+
+# Build application image
+podman build -t crud-app-crud-app:latest -f Containerfile .
+
+# Start application
+podman run -d --pod crud-app-pod --name crud-contact-manager \
+  -e NODE_ENV=production \
+  -e PORT=5000 \
+  -e DB_HOST=localhost \
+  -e DB_PORT=5432 \
+  -e DB_NAME=contacts_db \
+  -e DB_USER=contacts_user \
+  -e DB_PASSWORD=contacts_secure_pass \
+  localhost/crud-app-crud-app:latest
+
+# Wait for application to start
+sleep 5
+
+# Open your browser
+open http://localhost:8080
 ```
 
 **What just happened?**
-- Podman built a production-ready image
-- Started a container with the app
-- Mounted data.json for persistence
-- Application is now running on port 5000
+- Created a Podman pod for container networking
+- Started PostgreSQL 15 database with persistent storage
+- Initialized complete database schema (contacts, groups, audit log)
+- Built production-ready application image
+- Started application container connected to database
+- Application is now running on port 8080
 
 **Useful Commands:**
 ```bash
-# View logs
-podman-compose logs -f
+# View application logs
+podman logs -f crud-contact-manager
+
+# View database logs
+podman logs -f postgres-db
+
+# Check container status
+podman ps --pod --filter "pod=crud-app-pod"
 
 # Stop the application
-podman-compose down
+podman stop crud-contact-manager postgres-db
 
-# Restart
-podman-compose restart
+# Restart the application
+podman restart crud-contact-manager postgres-db
+
+# Complete shutdown
+podman pod stop crud-app-pod
+podman pod rm crud-app-pod
 ```
 
-#### Path B: Local Development
+### Step 3: Verify Installation
 
 ```bash
-# Run the interactive setup script
-./scripts/setup.sh
+# Test API endpoints
+curl http://localhost:8080/api/contacts
+# Expected: [] (empty array for new installation)
 
-# Choose option 1 (Local Development)
-# The script will install all dependencies
+curl http://localhost:8080/api/groups
+# Expected: [] (empty array)
 
-# Start backend (Terminal 1)
-npm start
+curl http://localhost:8080/api/stats
+# Expected: {"total_contacts":"0","total_groups":"0",...}
 
-# Start frontend (Terminal 2)
-cd client && npm start
+# Test frontend
+curl -I http://localhost:8080/
+# Expected: HTTP/1.1 200 OK
 ```
 
-**Access:**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+### Step 4: Use the Application
 
-### Step 3: Use the Application
+1. **View Contacts**: Empty list on fresh install
+2. **Add Contact**: Click "Add Contact" button, fill form, and save
+3. **Create Groups**: Organize contacts into groups
+4. **Search**: Use full-text search to find contacts
+5. **Edit Contact**: Click edit icon on any contact card
+6. **Delete Contact**: Click delete icon (with confirmation)
 
-1. **View Contacts**: See 20 pre-loaded fictitious contacts
-2. **Add Contact**: Fill the form at the top and click "Add Contact"
-3. **Edit Contact**: Click the "Edit" button on any contact card
-4. **Delete Contact**: Click the "Delete" button (with confirmation)
+All changes are automatically saved to PostgreSQL database!
 
-All changes are automatically saved to `data.json`!
+**Features:**
+- ✅ Full-text search across name and address
+- ✅ Contact groups for organization
+- ✅ Audit trail tracking all changes
+- ✅ Advanced filtering by group and date
+- ✅ Export/Import functionality
+- ✅ Statistics dashboard
 
 ## Troubleshooting
 
-### Podman Issues
+### Common Issues
 
-**Port 5000 already in use:**
+**Web page flashes and disappears:**
 ```bash
-# Stop whatever is using port 5000
-lsof -ti:5000 | xargs kill -9
+# Check if groups table has required columns
+podman exec postgres-db psql -U contacts_user -d contacts_db -c "\d groups"
 
-# Or change the port in podman-compose.yml
-ports:
-  - "8080:5000"  # Use port 8080 instead
+# If missing columns, reinitialize schema
+podman exec -i postgres-db psql -U contacts_user -d contacts_db < scripts/init-database.sql
+
+# Restart application
+podman restart crud-contact-manager
 ```
 
-**Container won't start:**
+**Database connection errors:**
 ```bash
+# Check if PostgreSQL is running
+podman ps | grep postgres-db
+
 # Check logs
-podman-compose logs
+podman logs postgres-db
 
-# Rebuild from scratch
-podman-compose down
-podman-compose up -d --build
+# Restart database
+podman restart postgres-db
 ```
 
-### Local Development Issues
-
-**Port conflicts:**
+**Port already in use:**
 ```bash
-# Backend (port 5000)
-PORT=5001 npm start
+# Check what's using the ports
+lsof -ti:8080
+lsof -ti:5434
 
-# Frontend (port 3000)
-cd client && PORT=3001 npm start
+# Change ports in pod creation:
+podman pod create --name crud-app-pod -p 8081:5000 -p 5435:5432
 ```
 
-**Dependencies not installing:**
-```bash
-# Clear npm cache
-npm cache clean --force
-
-# Remove node_modules and reinstall
-rm -rf node_modules client/node_modules
-npm install
-cd client && npm install
-```
+**For detailed troubleshooting:**
+See [TROUBLESHOOTING-DEPLOYMENT.md](./TROUBLESHOOTING-DEPLOYMENT.md)
 
 ## What's Next?
 
-- **Read the full documentation**: [README.md](./README.md)
-- **Learn about Podman deployment**: [DOCKER.md](./DOCKER.md)
-- **Explore the API**: Try the endpoints at http://localhost:5000/api/contacts
-- **Customize**: Edit the code and see changes in real-time (dev mode)
+- **Read the full documentation**: [POSTGRESQL-MIGRATION.md](./POSTGRESQL-MIGRATION.md)
+- **Troubleshooting guide**: [TROUBLESHOOTING-DEPLOYMENT.md](./TROUBLESHOOTING-DEPLOYMENT.md)
+- **Explore the API**: Try the endpoints at http://localhost:8080/api/contacts
+- **View changelog**: [CHANGELOG-v3.2.3-SCHEMA-FIX.md](./CHANGELOG-v3.2.3-SCHEMA-FIX.md)
 
 ## API Quick Reference
 

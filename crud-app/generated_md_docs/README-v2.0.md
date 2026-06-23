@@ -24,7 +24,7 @@ podman machine init
 podman machine start
 ```
 
-**Install Podman (Linux):**
+**Install Podman (Linux):**g
 ```bash
 # Fedora/RHEL/CentOS
 sudo dnf install podman
